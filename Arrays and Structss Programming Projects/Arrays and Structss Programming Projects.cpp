@@ -1,20 +1,27 @@
-// Arrays and Structss Programming Projects.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// Arrays and Structss Programming Projects.cpp : This file contains Project 1: Marathon Runners with Parallel Arrays.
+// This project will take a file with the name of runners and their distance ran for a week, this program will take their data and using parallel arrays to find their total miles ran, average, and display the miles ran every day for each runner. 
 
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+const int x = 230;
+
+    //Prototype Functions
+
+void fileRead(string[], int&  x, double array[][], string file);
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    //Variables
+    
+    string file = "runner.txt";
+    const int runneramount = 20;
+    string myrunners[runneramount];
+
+
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
