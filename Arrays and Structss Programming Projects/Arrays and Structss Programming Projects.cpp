@@ -8,11 +8,16 @@
 
 using namespace std;
 
-const int x = 230;
+//Global constants
+
+const int maxmiles = 10;        //This is the maximum entries of miles ran per person
+const int runneramount = 20;    //This is the maximum number of runners
 
     //Prototype Functions
 
-void fileRead(string[], int&  x, double array[][], string file);
+
+
+int fileRead(string[], double array[][maxmiles], string file);  //This function reads the input file and outputs the data to the parallel arrays
 
 
 int main()
@@ -20,8 +25,15 @@ int main()
     //Variables
     
     string file = "runner.txt";
-    const int runneramount = 20;
+    
     string myrunners[runneramount];
 
+    double miles[runneramount][maxmiles];
+    
+    
+}
+
+int fileRead(string[], double array[][maxmiles], string file)
+{
 
 }
