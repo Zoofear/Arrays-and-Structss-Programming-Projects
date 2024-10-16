@@ -17,23 +17,67 @@ const int runneramount = 20;    //This is the maximum number of runners
 
 
 
-int fileRead(string[], double array[][maxmiles], string file);  //This function reads the input file and outputs the data to the parallel arrays
+int fileRead(string names[], double array[][maxmiles], string file);  //This function reads the input file and outputs the data to the parallel arrays
 
 
 int main()
 {
     //Variables
     
-    string file = "runner.txt";
+    string file = "runners.txt";
     
     string myrunners[runneramount];
 
     double miles[runneramount][maxmiles];
     
+    int numrecords;
     
+    numrecords = fileRead(myrunners, miles, file);
+    if (numrecords == -1)
+    {
+        cout << "Too many runners in the file" << endl;
+        exit;
+    }
+    
+
+    //debug
+    cout << "data from file" << endl;
+    for (int row = 0; row < numrecords; row++)
+    {
+        cout << myrunners[row] << " ";
+        for (int col = 0; col < maxmiles; col++)
+            cout << miles[row][col] << " ";
+        cout << endl;
+    }
 }
 
-int fileRead(string[], double array[][maxmiles], string file)
+int fileRead(string names[], double array[][maxmiles], string file)
 {
+    int numrecords = 0;
+    ifstream runnerfile(file);
+    if (!runnerfile)
+    {
+        cout << "File will not open" << endl;
+        exit;
+    }
 
+    while (runnerfile >> names[numrecords])
+    {
+       if (numrecords < runneramount)
+       {
+        for (int A = 0; A < maxmiles; A++)
+            runnerfile >> array[numrecords][A];
+        numrecords++;
+       }
+        
+       else
+       {
+           return -1;
+       }
+   
+    }
+
+    runnerfile.close();
+
+    return numrecords;
 }
