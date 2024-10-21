@@ -14,13 +14,24 @@ using namespace std;
 const int maxentries = 7;        //This is the maximum entries of miles ran per person
 const int runneramount = 20;    //This is the maximum number of runners
 
+
+    //Global Structs
+
+struct runnerInfo
+{
+    string runnername;
+    double miles[maxentries];
+    double averagemiles;
+    double totalmiles;
+};
+
     //Prototype Functions
 
-int runnerFileData(string names[], double array[][maxentries], string file);  //This function reads the input file and outputs the data to the parallel arrays
+int runnerFileData(runnerInfo runners[], string file);  //This function reads the input file and outputs the data to the parallel arrays
 
-void runnerAvgTotal(const double array[][maxentries], double avg[], double total[], int numrecords);  //This function takes the inputted miles and calculates the average and total miles each runner has ran
+void runnerAvgTotal(runnerInfo runners[], int numrecords);  //This function takes the inputted miles and calculates the average and total miles each runner has ran
 
-void milesOutput(const string names[], const double array[][maxentries], const double avg[], const double total[], int numrecords);     //This function takes all the data and calculations and outputs it to be read by the user
+void milesOutput(runnerInfo runners[], int numrecords);     //This function takes all the data and calculations and outputs it to be read by the user
 
     //Main
 
@@ -28,28 +39,22 @@ int main()
 {
     //Variables
     
-    const string file = "runners.txt";      //The file used for input
-    
-    string myrunners[runneramount];         //This array is for the runners namess
+    runnerInfo runners[runneramount];
 
-    double miles[runneramount][maxentries];   //This array is for the miles each runner has ran
-
-    double mileaverage[runneramount];       //This array is for storing the average miles each runner has ran for the week
-
-    double miletotal[runneramount];         //This array is for storing the miles each runner has ran added up
+    string file = "runners.txt";
     
     int numrecords;     //This is used for a check to make sure there arent too manny runners in the file
     
-    numrecords = runnerFileData(myrunners, miles, file);
+    numrecords = runnerFileData(runners, file);
     if (numrecords == -1)
     {
         cout << "Too many runners in the file" << endl; //Check to make sure there aren't too many runners inputted
         exit;
     }
     
-    runnerAvgTotal(miles, mileaverage, miletotal, numrecords);
+    runnerAvgTotal(runners, numrecords);
 
-    milesOutput(myrunners, miles, mileaverage, miletotal, numrecords);
+    milesOutput(runners, numrecords);
     
     return;
 }
@@ -57,7 +62,7 @@ int main()
 
     //Functions
 
-int runnerFileData(string names[], double array[][maxentries], string file)
+int runnerFileData(runnerInfo runners[], string file)
 {
     int numrecords = 0;                         //Value used for indexing
    
@@ -68,13 +73,13 @@ int runnerFileData(string names[], double array[][maxentries], string file)
         cout << "File will not open" << endl;   //File open check
         exit;
     }
-    while (runnerfile >> names[numrecords])     //This places the runners name into the runner array
+    while (runnerfile >> runners[numrecords].runnername)     //This places the runners name into the runner array struct
     {
        if (numrecords < runneramount)
        {
-        for (int A = 0; A < maxentries; A++)      //This fills out the miles for each runner in the 2D array and counts up in the index using A to fill in every spot
-            runnerfile >> array[numrecords][A];
-        numrecords++;                           //Counts up for the next place in the array
+        for (int A = 0; A < maxentries; A++)      //This fills out the miles for each runner in the struct and counts up in the index using A to fill in every spot
+            runnerfile >> runners[numrecords].miles[A];
+        numrecords++;                           //Counts up for the next place in the struct
        }
         
        else
@@ -89,34 +94,34 @@ int runnerFileData(string names[], double array[][maxentries], string file)
     return numrecords;
 }
 
-void runnerAvgTotal(const double array[][maxentries], double avg[], double total[], int numrecords)
+void runnerAvgTotal(runnerInfo runners[], int numrecords)
 {
     double sum;                                         //this is used to add all of the miles together
-    for (int row = 0; row < numrecords; row++)          //This is used for indexing the arrays on which runner is being calculated
+    for (int row = 0; row < numrecords; row++)          //This is used for indexing the structs on which runner is being calculated
     {
         sum = 0;
-        for (int col = 0; col < maxentries; col++)      //This indexes the 2d array fow which day ran
+        for (int col = 0; col < maxentries; col++)      //This indexes the struct for which day ran
         {
-            sum += array[row][col];                     //Adding the value from the array to the sum
+            sum += runners[row].miles[col];                     //Adding the value from the struct to the sum
         }
 
-        total[row] = sum;                               //This writes the total miles ran for the current runner
+        runners[row].totalmiles = sum;                               //This writes the total miles ran for the current runner
 
-        avg[row] = sum / maxentries;                    //Thjs calculates then writes the average miles ran for the current runner
+        runners[row].averagemiles = sum / maxentries;                    //Thjs calculates then writes the average miles ran for the current runner
     }
 }
 
-void milesOutput(const string names[], const double array[][maxentries], const double avg[], const double total[], int numrecords)
+void milesOutput(runnerInfo runners[], int numrecords)
 {
     cout << "Daily Miles Ran" << endl;                                                                                                          //Title of the graph
     cout << "Runner       Sunday       Monday       Tuesday      Wednesday    Thursday     Friday       Saturday     Average  Total" << endl;   //Header of the graph 
     for (int row = 0; row < numrecords; row++)                                                                                                  //Used to choose which runners data is being written
     {
-        cout << setw(13) << left << names[row];                                                                                                 //Outputs the names of the runner                                                   
+        cout << setw(13) << left << runners[row].runnername;                                                                                                 //Outputs the names of the runner                                                   
 
         for (int col = 0; col < maxentries; col++)                                                                                              //Indexes the data points for the miles each runner ran
-            cout << setw(12) << array[row][col] << " ";                                                                                         //Outputs the mile for that day
-        cout << fixed << setprecision(2) << setw(9) << avg[row];                                                                                //Outputs the average miles ran that week
-        cout << setprecision(0) << total[row] << endl;                                                                                          //Outputs the total mile ran that week
+            cout << setw(12) << runners[row].miles[col] << " ";                                                                                         //Outputs the mile for that day
+        cout << fixed << setprecision(2) << setw(9) << runners[row].averagemiles;                                                                                //Outputs the average miles ran that week
+        cout << setprecision(0) << runners[row].totalmiles << endl;                                                                                          //Outputs the total mile ran that week
     }
 }
