@@ -38,25 +38,24 @@ void milesOutput(runnerInfo runners[], int numrecords);     //This function take
 int main()
 {
     //Variables
-    
+
     runnerInfo runners[runneramount];
 
     string file = "runners.txt";
-    
+
     int numrecords;     //This is used for a check to make sure there arent too manny runners in the file
-    
+
     numrecords = runnerFileData(runners, file);
     if (numrecords == -1)
     {
         cout << "Too many runners in the file" << endl; //Check to make sure there aren't too many runners inputted
         exit;
     }
-    
+
     runnerAvgTotal(runners, numrecords);
 
     milesOutput(runners, numrecords);
-    
-    return;
+
 }
 
 
